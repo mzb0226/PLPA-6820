@@ -1,0 +1,5 @@
+TEST
+usethis::create_github_token()
+gitcreds::gitcreds_set(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)
+#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
+
