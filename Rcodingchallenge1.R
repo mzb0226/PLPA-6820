@@ -1,5 +1,5 @@
-setwd("C:/Users/muhta/OneDrive/Desktop/ENTM-6820")  # Set working directory
-getwd()  # Verify working directory
+setwd("C:/Users/muhta/OneDrive/Desktop/ENTM-6820") 
+getwd()
 
 #Creating a vector named 'z' with values from 1 to 200
 z <- 1:200
@@ -16,6 +16,9 @@ zdf <- data.frame(z, logz)
 
 #Renaming columns to 'zvec' and 'zlogic'
 names(zdf) <- c("zvec", "zlogic")
+
+#Git link
+#https://github.com/mzb0226/PLPA-6820.git
 
 #Adding a new column zsquared equal to zvec squared
 zdf$zsquared <- zdf$zvec^2
