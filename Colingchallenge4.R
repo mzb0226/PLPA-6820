@@ -1,81 +1,120 @@
 
-view(MycotoxinData.csv)
+
 # Setting working directory
-setwd("C:/Users/muhta/OneDrive/Desktop/ENTM-6820") 
-# Loading data
-data <- read.csv("MycotoxinData.csv")
+setwd("~/GitHub/PLPA-6820")
+
 # The x and y variables are specified inside aes(), along with additional mappings for color, shape, size, etc.
 install.packages("ggplot2")
-
+# Loading data
+data <- read.csv("MycotoxinData.csv")
 #### 2. Loading libraries and create a boxplot ####
 library(ggplot2)
 library(readr)
 library(dplyr)
-# Boxplot
-ggplot(data, aes(x = Treatment, y = DON, color = Cultivar)) +
-  geom_boxplot() +
-  labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
 
 
-# 3. Creating Bar chart with standard-error error bars
-ggplot(data, aes(x = Treatment, y = DON, fill = Cultivar)) +
-  stat_summary(fun = mean, geom = "bar", position = position_dodge(), width = 0.6) +
-  stat_summary(fun.data = mean_se, geom = "errorbar", position = position_dodge(0.6), width = 0.2) +
-  labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
+# using two colors
+cbbPalette <- c("#0072B2", "#D55E00")  
 
 
-# 4. Adding points over boxplot and bar chart
-ggplot(data, aes(x = Treatment, y = DON, fill = Cultivar)) +
-  geom_boxplot() +
-  geom_jitter(shape = 21, position = position_jitterdodge(jitter.width = 0.2), color = "black") +
-  labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
+#### 2. Change the Treatment factor order: ####
+#    "NTC", "Fg", "Fg + 37", "Fg + 40", "Fg + 70"
+data$Treatment <- factor(data$Treatment,
+                         levels = c("NTC", "Fg", "Fg + 37", "Fg + 40", "Fg + 70"))
 
 
+#### 1. Create a boxplot of DON by Treatment ####
 
-# 5.Applying colorblind-friendly palette
-cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
-ggplot(data, aes(x = Treatment, y = DON, fill = Cultivar)) +
-  geom_boxplot() +
+# checking if DON is numeric
+data$DON <- as.numeric(as.character(data$DON))
+# filtering out zeros
+data_nonzero <- subset(data, DON > 0)
+
+plot_don <- ggplot(data_nonzero, aes(x = Treatment, y = DON, fill = Cultivar)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = Cultivar), width = 0.2, alpha = 0.6) +
   scale_fill_manual(values = cbbPalette) +
+  scale_color_manual(values = cbbPalette) +
+  stat_summary(fun = mean, geom = "bar", position = "dodge") +      # Removed extra parenthesis
+  stat_summary(fun.data = mean_se, geom = "errorbar", position = "dodge") +  # Removed extra '=' before mean_se
   labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
+  facet_wrap(~ Cultivar) +
+  theme_classic()
 
 
-# 6. Faceting the plots based on cultivar
-ggplot(data, aes(x = treatment, y = DON, fill = cultivar)) +
-  geom_boxplot() +
-  facet_wrap(~cultivar) +
-  labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
+# converting to log scale
+plot_don +
+  scale_y_log10() +
+  labs(y = "DON (ppm, log scale)")
+
+####3.Creating additional plots with different y-variables
+
+# Convert X15ADON to numeric
+data$X15ADON <- as.numeric(as.character(data$X15ADON))
+
+# Filter out zeros from X15ADON
+data_nonzero <- subset(data, X15ADON > 0)
+
+# Create the plot for X15ADON (15aDON)
+plot_15adon <- ggplot(data_nonzero, aes(x = Treatment, y = X15ADON, fill = Cultivar)) + geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = Cultivar), width = 0.2, alpha = 0.6) +
+  scale_fill_manual(values = cbbPalette) +
+  scale_color_manual(values = cbbPalette) +
+  labs(y = "15aDON (ppm)", x = "") +
+  facet_wrap(~ Cultivar) +
+  theme_classic()
+
+# Apply the log scale to the y-axis
+plot_15adon +
+  scale_y_log10() +
+  labs(y = "15ADON (ppm, log scale)")
+
+# Convert MassperSeed_mg to numeric (if not already)
+data$MassperSeed_mg <- as.numeric(as.character(data$MassperSeed_mg))
+
+# Filter out rows where MassperSeed_mg is zero (if needed)
+data_nonzero_mass <- subset(data, MassperSeed_mg > 0)
+
+# Create the plot for Seed Mass using the filtered data
+plot_seedmass <- ggplot(data_nonzero_mass, aes(x = Treatment, y = MassperSeed_mg, fill = Cultivar)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = Cultivar), width = 0.2, alpha = 0.6) +
+  scale_fill_manual(values = cbbPalette) +
+  scale_color_manual(values = cbbPalette) +
+  labs(y = "Seed Mass (mg)", x = "") +
+  facet_wrap(~ Cultivar) +
+  theme_classic()
+
+# Apply a log scale to the y-axis
+plot_seedmass +
+  scale_y_log10() +
+  labs(y = "Seed Mass (mg, log scale)")
 
 
-# 7. Adding transparency to points
-ggplot(data, aes(x = Treatment, y = DON, fill = Cultivar)) +
-  geom_boxplot() +
-  geom_jitter(shape = 21, position = position_jitterdodge(jitter.width = 0.2), 
-              alpha = 0.5, color = "grey") +
-  labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
+#combined_plot
+#install package
+install.packages("ggpubr")
+library(ggpubr)
+combined_plot <- ggarrange(plot_don, plot_15adon, plot_seedmass,
+                           ncol = 3, nrow = 1,
+                           labels = c("A", "B", "C"),
+                           common.legend = TRUE)
 
+plot_don_pwc <- plot_don +
+  geom_pwc(method = "t.test", label = "p.signif")
 
+plot_15adon_pwc <- plot_15adon +
+  geom_pwc(method = "t.test", label = "p.signif")
 
-# 8. Exploring another visualization (violin plot)
-ggplot(data, aes(x = Treatment, y = DON, fill = Cultivar)) +
-  geom_violin() +
-  geom_jitter(shape = 21, position = position_jitterdodge(jitter.width = 0.2), 
-              color = "pink") +
-  labs(y = "DON (ppm)", x = "") +
-  theme_minimal()
+plot_seedmass_pwc <- plot_seedmass +
+  geom_pwc(method = "t.test", label = "p.signif")
 
+combined_plot_pwc <- ggarrange(plot_don_pwc, plot_15adon_pwc, plot_seedmass_pwc,
+                               ncol = 3, nrow = 1,
+                               labels = c("A", "B", "C"),
+                               common.legend = TRUE)
+print(combined_plot_pwc)
 
-# I would choose the violin plot because it better represents the distribution of data while still allowing individual points to be visualized.
+# GitHub Repository: https://github.com/mzb0226/PLPA-6820.git
 
-
-# 9. Push code to GitHub and fork repository
-#I still don't couldn't find a partner as I had to miss class due to my illness, I would update it when I find someone.
-# GitHub repository URLs:
-#https://github.com/mzb0226/PLPA-6820.git
