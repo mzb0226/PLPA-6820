@@ -1,10 +1,12 @@
-### [Readme Link](https://github.com/mzb0226/PLPA-6820/blob/main/Coding%20Challenge4/Challagne4.md)
-## **YAML header**
-
-The YAML (Yet Another Markup Language) header is a metadata block at the
-beginning of an R Markdown (.Rmd) document. It defines settings for the
-document, such as the title, author, output format, and table of
-contents. It is enclosed in triple dashes (—).
+[Github
+Link](https://github.com/mzb0226/PLPA-6820/blob/main/Coding%20Challenge4/Challagne4.md)
+\## **YAML header** The YAML (Yet Another Markup Language) header is a
+metadata block at the beginning of an R Markdown (.Rmd) document. It
+defines settings for the document, such as the title, author, output
+format, and table of contents. It is enclosed in triple dashes (—).
+Example: title: “CodingChallenge4” author: “Muhtarin Khayer Brohee”
+date: “2025-02-27” output: md\_document: variant: gfm html\_document:
+default pdf\_document: default word\_document: default toc: true
 
 ## **Literate programming**
 
