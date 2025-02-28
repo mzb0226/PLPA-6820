@@ -117,3 +117,28 @@ produces reports in HTML, PDF, or Word, making them easy to share.
 
     stats_seedmass <- seedmass + 
       geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")
+
+## **File Tree**
+
+    fs::dir_tree()
+
+    ## .
+    ## ├── Challagne4.docx
+    ## ├── Challagne4.md
+    ## ├── Challagne4.Rmd
+    ## ├── Challagne4.tex
+    ## ├── Challagne4_files
+    ## │   ├── figure-gfm
+    ## │   │   ├── combined_plot-1.png
+    ## │   │   ├── data_plot-1.png
+    ## │   │   ├── data_plot-2.png
+    ## │   │   └── data_plot-3.png
+    ## │   ├── figure-html
+    ## │   └── figure-markdown_strict
+    ## │       ├── combined_plot-1.png
+    ## │       ├── data_plot-1.png
+    ## │       ├── data_plot-2.png
+    ## │       └── data_plot-3.png
+    ## ├── Colingchallenge4.R
+    ## ├── MycotoxinData.csv
+    ## └── read.md
