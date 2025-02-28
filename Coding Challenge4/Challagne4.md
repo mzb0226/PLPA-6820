@@ -1,10 +1,3 @@
-CodingChallenge4
-================
-Muhtarin Khayer Brohee
-2025-02-27
-
-true
-
 ## **YAML header**
 
 The YAML (Yet Another Markup Language) header is a metadata block at the
@@ -26,10 +19,8 @@ produces reports in HTML, PDF, or Word, making them easy to share.
 
 [Article Link](https://pubmed.ncbi.nlm.nih.gov/34587775/)
 
-``` r
-DON_data <- read.csv("MycotoxinData.csv", na.strings = "na")
-str(DON_data)
-```
+    DON_data <- read.csv("MycotoxinData.csv", na.strings = "na")
+    str(DON_data)
 
     ## 'data.frame':    375 obs. of  6 variables:
     ##  $ Treatment     : chr  "Fg" "Fg" "Fg" "Fg" ...
@@ -39,18 +30,14 @@ str(DON_data)
     ##  $ DON           : num  107.3 32.6 416 211.9 124 ...
     ##  $ X15ADON       : num  3 0.85 3.5 3.1 4.8 3.3 6.9 2.9 2.1 0.71 ...
 
-``` r
-# Print column names to check for typos or formatting issues
-print(colnames(DON_data))
-```
+    # Print column names to check for typos or formatting issues
+    print(colnames(DON_data))
 
     ## [1] "Treatment"      "Cultivar"       "BioRep"         "MassperSeed_mg"
     ## [5] "DON"            "X15ADON"
 
-``` r
-# Show the first few rows of the dataset
-head(DON_data)
-```
+    # Show the first few rows of the dataset
+    head(DON_data)
 
     ##   Treatment Cultivar BioRep MassperSeed_mg   DON X15ADON
     ## 1        Fg  Wheaton      2      10.291304 107.3    3.00
@@ -60,10 +47,8 @@ head(DON_data)
     ## 5        Fg  Wheaton      2      10.179167 124.0    4.80
     ## 6        Fg  Wheaton      2      12.044444  73.1    3.30
 
-``` r
-# Check the structure of the data
-str(DON_data)
-```
+    # Check the structure of the data
+    str(DON_data)
 
     ## 'data.frame':    375 obs. of  6 variables:
     ##  $ Treatment     : chr  "Fg" "Fg" "Fg" "Fg" ...
@@ -75,70 +60,60 @@ str(DON_data)
 
 ## **Plot**
 
-``` r
-cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+    cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 
-DON_plot <- ggplot(DON_data, aes(x = Treatment, y = DON, fill = Cultivar)) +
-  geom_boxplot(outliers = T, outlier.shape = 15) +
-  ylab("DON (ppm)") +
-  xlab("") +
-  geom_jitter(pch = 21, position = position_jitterdodge(), color = "black", alpha = 0.6) + 
-  scale_fill_manual(values = c(cbbPalette[[3]], cbbPalette[[4]])) +
-  theme_classic() +
-  facet_wrap(~Cultivar)
-DON_plot
-```
+    DON_plot <- ggplot(DON_data, aes(x = Treatment, y = DON, fill = Cultivar)) +
+      geom_boxplot(outliers = T, outlier.shape = 15) +
+      ylab("DON (ppm)") +
+      xlab("") +
+      geom_jitter(pch = 21, position = position_jitterdodge(), color = "black", alpha = 0.6) + 
+      scale_fill_manual(values = c(cbbPalette[[3]], cbbPalette[[4]])) +
+      theme_classic() +
+      facet_wrap(~Cultivar)
+    DON_plot
 
-![](Challagne4_files/figure-gfm/data_plot-1.png)<!-- -->
+![](Challagne4_files/figure-markdown_strict/data_plot-1.png)
 
-``` r
-DON_data$Treatment <- factor(DON_data$Treatment, levels = c("NTC", "Fg", "Fg + 37", "Fg + 40", "Fg + 70"))
+    DON_data$Treatment <- factor(DON_data$Treatment, levels = c("NTC", "Fg", "Fg + 37", "Fg + 40", "Fg + 70"))
 
-DON_15 <- ggplot(DON_data, aes(x = Treatment, y = X15ADON, fill = Cultivar)) +
-  geom_boxplot(outliers = F) +
-  ylab("DON (ppm)") +
-  xlab("") +
-  geom_jitter(pch = 21, position = position_jitterdodge(), color = "black") + 
-  scale_fill_manual(values = c(cbbPalette[[3]], cbbPalette[[4]])) +
-  theme_classic() +
-  facet_wrap(~Cultivar)
-DON_15
-```
+    DON_15 <- ggplot(DON_data, aes(x = Treatment, y = X15ADON, fill = Cultivar)) +
+      geom_boxplot(outliers = F) +
+      ylab("DON (ppm)") +
+      xlab("") +
+      geom_jitter(pch = 21, position = position_jitterdodge(), color = "black") + 
+      scale_fill_manual(values = c(cbbPalette[[3]], cbbPalette[[4]])) +
+      theme_classic() +
+      facet_wrap(~Cultivar)
+    DON_15
 
-![](Challagne4_files/figure-gfm/data_plot-2.png)<!-- -->
+![](Challagne4_files/figure-markdown_strict/data_plot-2.png)
 
-``` r
-seedmass <- ggplot(DON_data, aes(x = Treatment, y = MassperSeed_mg, fill = Cultivar)) +
-  geom_boxplot(outliers = F) +
-  ylab("DON (ppm)") +
-  xlab("") +
-  geom_jitter(pch = 21, position = position_jitterdodge(), color = "black") + 
-  scale_fill_manual(values = c(cbbPalette[[3]], cbbPalette[[4]])) +
-  theme_classic() +
-  facet_wrap(~Cultivar)
-seedmass
-```
+    seedmass <- ggplot(DON_data, aes(x = Treatment, y = MassperSeed_mg, fill = Cultivar)) +
+      geom_boxplot(outliers = F) +
+      ylab("DON (ppm)") +
+      xlab("") +
+      geom_jitter(pch = 21, position = position_jitterdodge(), color = "black") + 
+      scale_fill_manual(values = c(cbbPalette[[3]], cbbPalette[[4]])) +
+      theme_classic() +
+      facet_wrap(~Cultivar)
+    seedmass
 
-![](Challagne4_files/figure-gfm/data_plot-3.png)<!-- -->
+![](Challagne4_files/figure-markdown_strict/data_plot-3.png)
 
 ### **Combined plot**
 
-``` r
-ggarrange(DON_plot, DON_15, seedmass, labels = "auto", ncol = 3, nrow = 1, common.legend = T)
-```
+    ggarrange(DON_plot, DON_15, seedmass, labels = "auto", ncol = 3, nrow = 1, common.legend = T)
 
-![](Challagne4_files/figure-gfm/combined_plot-1.png)<!-- -->
+![](Challagne4_files/figure-markdown_strict/combined_plot-1.png)
 
 ## **Statistical comparison**
 
-``` r
-stats_donplot <- DON_plot + 
-  geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")
+    stats_donplot <- DON_plot + 
+      geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")
 
-stats_DON_15 <- DON_15 + 
-  geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")
+    stats_DON_15 <- DON_15 + 
+      geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")
 
-stats_seedmass <- seedmass + 
-  geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")
-```
+    stats_seedmass <- seedmass + 
+      geom_pwc(aes(group = Treatment), method = "t_test", label = "{p.adj.format}{p.adj.signif}", p.adjust.method = "fdr")

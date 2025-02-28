@@ -3,6 +3,7 @@ title: "CodingChallenge4"
 author: "Muhtarin Khayer Brohee"
 date: "2025-02-27"
 output:
+  md_document:
   variant: gfm
   html_document: default
   pdf_document: default
