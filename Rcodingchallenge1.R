@@ -1,4 +1,5 @@
 setwd("C:/Users/muhta/OneDrive/Desktop/ENTM-6820") 
+setwd("C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820")
 getwd()
 
 #Creating a vector named 'z' with values from 1 to 200
