@@ -3,9 +3,10 @@ title: "CodingChallenge4"
 author: "Muhtarin Khayer Brohee"
 date: "2025-02-27"
 output:
-  word_document: default
+  github_document: default
   html_document: default
   pdf_document: default
+  word_document: default
 toc_float: true
 ---
 ## **YAML header**
