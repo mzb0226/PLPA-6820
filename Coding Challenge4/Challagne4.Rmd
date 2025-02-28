@@ -10,7 +10,9 @@ output:
   word_document: default
 toc: true
 ---
-[Github Link](https://github.com/mzb0226/PLPA-6820/blob/main/Coding%20Challenge4/Challagne4.md)
+`
+## [Git link](https://github.com/mzb0226/PLPA-6820/blob/main/Coding%20Challenge4/Challagne4.md)
+
 ## **YAML header**
 The YAML (Yet Another Markup Language) header is a metadata block at the beginning of an R Markdown (.Rmd) document. It defines settings for the document, such as the title, author, output format, and table of contents. It is enclosed in triple dashes (---).
 Example:
