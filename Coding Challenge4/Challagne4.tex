@@ -117,13 +117,20 @@
 \setcounter{tocdepth}{3}
 \tableofcontents
 }
+`
+\href{https://github.com/mzb0226/PLPA-6820/blob/main/Coding\%20Challenge4/Challagne4.md}{Git
+link}
+
 \subsection{\texorpdfstring{\textbf{YAML
 header}}{YAML header}}\label{yaml-header}
 
 The YAML (Yet Another Markup Language) header is a metadata block at the
 beginning of an R Markdown (.Rmd) document. It defines settings for the
 document, such as the title, author, output format, and table of
-contents. It is enclosed in triple dashes (---).
+contents. It is enclosed in triple dashes (---). Example: title:
+``CodingChallenge4'' author: ``Muhtarin Khayer Brohee'' date:
+``2025-02-27'' output: md\_document: variant: gfm html\_document:
+default pdf\_document: default word\_document: default toc: true
 
 \subsection{\texorpdfstring{\textbf{Literate
 programming}}{Literate programming}}\label{literate-programming}
@@ -286,5 +293,41 @@ comparison}}{Statistical comparison}}\label{statistical-comparison}
 \end{Highlighting}
 \end{Shaded}
 
+\subsection{\texorpdfstring{\textbf{File
+Tree}}{File Tree}}\label{file-tree}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fs}\SpecialCharTok{::}\FunctionTok{dir\_tree}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## .
+## +-- Challagne4.docx
+## +-- Challagne4.md
+## +-- Challagne4.Rmd
+## +-- Challagne4.tex
+## +-- Challagne4_files
+## |   +-- figure-gfm
+## |   |   +-- combined_plot-1.png
+## |   |   +-- data_plot-1.png
+## |   |   +-- data_plot-2.png
+## |   |   \-- data_plot-3.png
+## |   +-- figure-html
+## |   +-- figure-latex
+## |   |   +-- combined_plot-1.pdf
+## |   |   +-- data_plot-1.pdf
+## |   |   +-- data_plot-2.pdf
+## |   |   \-- data_plot-3.pdf
+## |   \-- figure-markdown_strict
+## |       +-- combined_plot-1.png
+## |       +-- data_plot-1.png
+## |       +-- data_plot-2.png
+## |       \-- data_plot-3.png
+## +-- Colingchallenge4.R
+## +-- MycotoxinData.csv
+## \-- read.md
+\end{verbatim}
 
 \end{document}
