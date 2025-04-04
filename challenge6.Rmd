@@ -1,0 +1,142 @@
+---
+title: "Coding Challenge6"
+author: "Muhtarin Khayer Brohee"
+date: "2025-04-04"
+output:
+  word_document: default
+  variant: gfm
+  html_document: default
+  md_document:
+  toc: true
+  toc_float: true
+---
+
+[Git link](https://github.com/mzb0226/PLPA-6820/tree/main/Coding%20challenge%206)
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Writing Functions and For Loops in R
+
+#### Importance of Writing Your Own Functions and Using Iterations
+- Improves **reproducibility** by preventing copy-paste errors  
+- Makes code easier to **read, debug, and reuse**  
+- Automates **repetitive tasks**, which is crucial when handling large datasets  
+
+---
+
+#### How to Write a Function
+
+In R, a function is a **reusable block of code** that performs a specific task. To write a function, use the syntax:
+
+```r
+my_function <- function(input1, input2) {
+  # Code to perform some operation
+  result <- input1 + input2
+  return(result)
+}
+```
+##### Explanation
+- The function starts with a name, followed by <- function(...) to define the inputs.
+
+- Code is written inside {} curly brackets.
+
+- The return() statement defines what the function will output.
+
+- I usually write functions at the top of my script or .Rmd file so I can reuse them later.
+
+###  How to Write a For Loop
+
+A `for` loop is used when I want to **repeat an action multiple times**. The basic syntax is:
+
+```r
+for (i in 1:5) {
+  print(i)
+}
+```
+
+##### Explanation
+- The loop runs the code inside {} for each value of i in the sequence 1:5.
+
+- I write the loop where I need repeated actions, like applying a function to every row in a dataset.
+
+- Loops are useful for automating calculations, simulations, or building data structures.
+
+### Load data
+
+```{r load data, include=TRUE, echo=TRUE,warning=FALSE}
+cities <- read.csv("Cities.csv")
+```
+
+### Load libraries
+library(tidyverse)
+```{r load, include=TRUE, warning=FALSE,echo=TRUE}
+library(tidyverse)
+```
+
+### Haversine distance function
+```{r haversine, include=TRUE,warning=FALSE,echo=TRUE}
+haversine_dist <- function(lat1, lon1, lat2, lon2) {
+  rad.lat1 <- lat1 * pi/180
+  rad.lon1 <- lon1 * pi/180
+  rad.lat2 <- lat2 * pi/180
+  rad.lon2 <- lon2 * pi/180
+  
+  delta_lat <- rad.lat2 - rad.lat1
+  delta_lon <- rad.lon2 - rad.lon1
+  
+  a <- sin(delta_lat / 2)^2 + cos(rad.lat1) * cos(rad.lat2) * sin(delta_lon / 2)^2
+  c <- 2 * asin(sqrt(a))
+  
+  earth_radius <- 6378137
+  distance_km <- (earth_radius * c)/1000
+  
+  return(distance_km)
+}
+```
+
+
+### Compute distance between Auburn and New York
+```{r step5, include=TRUE, echo=TRUE, warning=FALSE}
+auburn <- cities %>% filter(city == "Auburn")
+nyc <- cities %>% filter(city == "New York")
+
+distance_to_nyc <- haversine_dist(
+  lat1 = auburn$lat, lon1 = auburn$long,
+  lat2 = nyc$lat, lon2 = nyc$long
+)
+
+print(distance_to_nyc)
+```
+
+
+### Loop to calculate distance from all cities to Auburn
+```{r loop, include=TRUE, echo=TRUE, warning=FALSE}
+#Initialize empty dataframe
+distance_df <- data.frame(City1 = character(), City2 = character(), Distance_km = numeric())
+
+# Auburn’s coordinates
+auburn_lat <- auburn$lat
+auburn_lon <- auburn$long
+
+# Loop through each city except Auburn
+for (i in 1:nrow(cities)) {
+  if (cities$city[i] != "Auburn") {
+    city_name <- cities$city[i]
+    city_lat <- cities$lat[i]
+    city_lon <- cities$long[i]
+    
+    dist_km <- haversine_dist(auburn_lat, auburn_lon, city_lat, city_lon)
+    
+    new_row <- data.frame(City1 = city_name, City2 = "Auburn", Distance_km = dist_km)
+    distance_df <- rbind(distance_df, new_row)
+  }
+}
+
+# View first few distances
+head(distance_df)
+```
+

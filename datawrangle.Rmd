@@ -1,0 +1,27 @@
+---
+title: "Datawrangling"
+author: "Muhtarin Khayer Brohee"
+output: md_document
+variant: gfm 
+toc: true 
+date: "2025-03-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r load module, include=TRUE}
+# Load necessary libraries
+library(tidyverse)
+
+```
+
+```{r load_data, include=TRUE,echo=TRUE, warning=FALSE}
+# Load datasets
+diversity <- read_csv("DiversityData.csv", show_col_types = FALSE)
+metadata <- read_csv("Metadata.csv", show_col_types = FALSE)
+
+# Join datasets on the 'Code' column
+alpha <- left_join(diversity, metadata, by = "Code")
+```
+
