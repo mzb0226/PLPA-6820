@@ -1,0 +1,120 @@
+---
+title: "Coding Challenge 7"
+author: "Muhtarin Khayer Brohee"
+date: "2025-04-08"
+output:
+  word_document:
+    toc: true
+  md_document:
+    variant: gfm
+---
+
+[Click the Github Link](https://github.com/mzb0226/PLPA-6820/tree/main/Coding%20Challenge%207)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Load libraries
+```{r load libraries, include=TRUE, warning=FALSE, echo=FALSE}
+
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+
+if (!require(tidyverse)) install.packages("tidyverse")
+if (!require(lme4)) install.packages("lme4")
+if (!require(emmeans)) install.packages("emmeans")
+if (!require(multcomp)) install.packages("multcomp")
+if (!require(multcompView)) install.packages("multcompView")
+
+library(tidyverse)
+library(lme4)
+library(emmeans)
+library(multcomp)
+library(multcompView)
+```
+### Load data
+```{r load data, include=TRUE, warning=FALSE, echo=TRUE}
+STAND <- readr::read_csv("PlantEmergence.csv")
+# Convert to factors
+STAND$Treatment <- as.factor(STAND$Treatment)
+STAND$DaysAfterPlanting <- as.factor(STAND$DaysAfterPlanting)
+STAND$Rep <- as.factor(STAND$Rep)
+
+# View structure
+str(STAND)
+```
+### Linear Model with Interaction
+```{r linearmodel, include=TRUE, warning=FALSE, echo=TRUE}
+
+model1 <- lm(Emergence ~ Treatment * DaysAfterPlanting, data = STAND)
+summary(model1)
+anova(model1)
+```
+#### Interpretation of model1
+- Intercept: 182.3 represents mean emergence in Treatment 1 at 7 days after planting (reference levels).
+- Treatment2 has a large negative coefficient (-136.5) and is highly significant (p < 2e-16), meaning it had substantially lower emergence.
+- Most interaction terms (e.g., Treatment2:DaysAfterPlanting14) are not significant (p > 0.05).
+- ANOVA:Treatment and DaysAfterPlanting are significant.
+- The interaction term (Treatment:DaysAfterPlanting) is not significant (F = 0.0522, p = 1), suggesting it can be removed.
+
+### Simplified Linear Model without Interaction
+```{r simplifyinglinear, include=TRUE, warning=FALSE, echo=TRUE}
+model2 <- lm(Emergence ~ Treatment + DaysAfterPlanting, data = STAND)
+summary(model2)
+anova(model2)
+```
+#### Interpretation: 
+The linear model showed a significant overall fit, with an F-statistic of 273.6 (p < 2.2e-16), and an adjusted R-squared of 0.9545, indicating that about 95.45% of the variation in plant emergence is explained by the model. The intercept is 182.163, meaning the average emergence for Treatment 1 at 7 days after planting is approximately 182 plants. Treatment 2 had a significantly lower emergence, with a coefficient of -134.531 (p < 2e-16), indicating an average decrease of about 135 plants compared to Treatment 1. According to the ANOVA results, both Treatment (F = 372.07, p < 2.2e-16) and DaysAfterPlanting (F = 11.07, p = 1.575e-06) have significant effects on plant emergence.
+
+### Least Square Means and Tukey's HSD with CLD
+```{r leastsquare, include=TRUE, warning=FALSE, echo=TRUE}
+lsm <- emmeans(model2, ~ Treatment)
+cld(lsm, Letters = letters)
+```
+#### Interpretation of model2
+- Treatment 2 had the lowest plant emergence (55.6) and was significantly different from all other treatments (group “a”).
+- Treatments 3, 5, and 6 had the highest emergence (~199–201) and were grouped as “c”, meaning they were not significantly different from each other.
+- Treatments 1, 4, 8, and 9 had moderately high emergence and were in group “bc”.
+- Treatment 7 was in group “b”, slightly lower than the top-performing treatments but still much better than Treatment 2.
+- Treatments that share the same letter are not significantly different; those with different letters are significantly different in plant emergence.
+
+### Plotting Function and Interpretation
+```{r plot, include=TRUE, warning=FALSE, echo=TRUE}
+plot_cldbars_onefactor <- function(lm_model, factor) {
+  data <- lm_model$model
+  variables <- colnames(lm_model$model)
+  dependent_var <- variables[1]
+  independent_var <- variables[2:length(variables)]
+  
+  lsmeans <- emmeans(lm_model, as.formula(paste("~", factor)))
+  Results_lsmeans <- cld(lsmeans, alpha = 0.05, reversed = TRUE, details = TRUE, Letters = letters)
+  
+  sig.diff.letters <- data.frame(Results_lsmeans$emmeans[,1], 
+                                 str_trim(Results_lsmeans$emmeans[,7]))
+  colnames(sig.diff.letters) <- c(factor, "Letters")
+  
+  ave_stand2 <- lm_model$model %>%
+    group_by(!!sym(factor)) %>%
+    dplyr::summarize(
+      ave.emerge = mean(.data[[dependent_var]], na.rm = TRUE),
+      se = sd(.data[[dependent_var]]) / sqrt(n())
+    ) %>%
+    left_join(sig.diff.letters, by = factor) %>%
+    mutate(letter_position = ave.emerge + 10 * se)
+  
+  plot <- ggplot(data, aes(x = !! sym(factor), y = !! sym(dependent_var))) + 
+    stat_summary(fun = mean, geom = "bar") +
+    stat_summary(fun.data = mean_se, geom = "errorbar", width = 0.5) +
+    ylab("Number of emerged plants") + 
+    geom_jitter(width = 0.02, alpha = 0.5) +
+    geom_text(data = ave_stand2, aes(label = Letters, y = letter_position), size = 5) +
+    xlab(as.character(factor)) +
+    theme_classic()
+  
+  return(plot)
+  }
+plot_cldbars_onefactor(model2, "Treatment")
+```
+
+#### Significance of letters in Plot
+- The letters above the bars in the plot represent statistical groupings based on Tukey's HSD test from the cld() function. 
+- Treatments that share the same letter (e.g., "a", "ab") are not significantly different from each other in terms of plant emergence. Treatments with different letters (e.g., "a" vs. "c") are significantly different.
