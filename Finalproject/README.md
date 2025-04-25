@@ -78,7 +78,7 @@ All R scripts used in this project are stored in the `R_scripts/` folder. Each s
 
 ---
 
-### 📁 2. Navigate to the `R_scripts/` Folder
+### 2. Navigate to the `R_scripts/` Folder
 
 This folder contains the following key scripts:
 
