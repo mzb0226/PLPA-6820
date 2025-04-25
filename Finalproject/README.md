@@ -90,3 +90,28 @@ These outputs are manuscript-ready and reproducible from script execution.
 ###  Notes
 
 - Ensure all required R packages are installed before running scripts
+## How to Clone This Project
+
+```bash
+git clone https://github.com/mzb0226/PLPA-6820.git
+cd PLPA-6820/Finalproject
+---
+
+## Version Control
+
+This project was developed using Git and GitHub to ensure reproducibility and transparency throughout the analysis.
+
+📂 A visual record of the commit history is available in:
+- `versioncontrolgit.png` (screenshot of Git version control activity)
+
+All code changes and project iterations were tracked using commits with meaningful messages.
+
+---
+
+## Acknowledgments
+
+This project was completed as part of the **PLPA-6820** graduate-level coursework at Auburn University.
+
+Special thanks to:
+- **Dr. Zachary Noel**, for his insightful lectures, guidance, and support throughout the course.
+- **ChatGPT (OpenAI)**, for assisting with R code generation, debugging, figure formatting, and project documentation.
