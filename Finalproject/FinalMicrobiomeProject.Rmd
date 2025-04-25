@@ -1,0 +1,79 @@
+---
+title: "Final Microbiome Project"
+author: "Muhtarin Khayer Brohee"
+date: "`r Sys.Date()`"
+output:
+  word_document:
+    toc: true
+  md_document:
+    variant: gfm
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Loading Library
+```{r loadlibrary, include=TRUE, echo=FALSE, warning=FALSE}
+library(tidyverse)
+library(readr)
+library(pheatmap)
+library(tibble)
+library(ggpubr)
+```
+## Introduction
+
+This R Markdown document presents a reproducible workflow for analyzing genus- and species-level microbial profiles derived from Kraken2 reports of gut microbiome samples from male and female American cockroach sample. The analysis includes presence-absence matrices, richness estimates, statistical comparisons, and genus-level heatmaps.
+
+## Load and Process Kraken Reports
+
+```{r load-presence-absence, include=TRUE, warning=FALSE}
+report_dir <- "C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject"
+files <- list.files(report_dir, pattern = "_kraken_report.txt$", full.names = TRUE)
+
+extract_species_presence <- function(filepath) {
+  filename <- tools::file_path_sans_ext(basename(filepath))
+  sample_raw <- str_extract(filename, "^[FM]_\\d{2}")
+  group <- ifelse(str_starts(sample_raw, "F"), "Female", "Male")
+  sample_name <- paste0(group, str_extract(sample_raw, "\\d+"))
+
+  df <- read_tsv(filepath, col_names = FALSE, col_types = cols(.default = "c"), quote = "", trim_ws = FALSE)
+  colnames(df) <- c("percent", "reads", "direct", "rank", "taxid", "name")
+  df <- df %>% mutate(reads = as.numeric(reads), name = str_trim(name))
+
+  taxa_df <- df %>%
+    filter(rank %in% c("G", "S"), reads > 0) %>%
+    mutate(present = 1) %>%
+    select(name, present)
+
+  presence_vector <- deframe(taxa_df)
+  tibble(Sample = sample_name, !!!set_names(presence_vector, names(presence_vector)))
+}
+
+presence_list <- lapply(files, extract_species_presence)
+presence_matrix <- reduce(presence_list, full_join, by = "Sample") %>%
+  replace(is.na(.), 0)
+write_csv(presence_matrix, file.path(report_dir, "presence_absence_matrix.csv"))
+
+presence_aggregated <- presence_matrix %>%
+  group_by(Sample) %>%
+  summarise(across(where(is.numeric), ~ as.numeric(any(. == 1)))) %>%
+  ungroup() %>%
+  mutate(Group = str_extract(Sample, "Female|Male"),
+         Richness = rowSums(across(where(is.numeric))))
+write_csv(presence_aggregated, file.path(report_dir, "presence_absence_matrix_aggregated.csv"))
+```
+
+## Species & Genus Richness per Sample
+
+```{r richness-plot,include=TRUE, warning=FALSE}
+cb_palette <- c("Female" = "#E69F00", "Male" = "#56B4E9")
+
+richness_plot <- ggplot(presence_aggregated, aes(x = Sample, y = Richness, fill = Group)) +
+  geom_col() +
+  scale_fill_manual(values = cb_palette) +
+  labs(title = "Species & Genus Richness per Sample", x = "Sample", y = "Number of Taxa") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
+
+print(richness_plot)
+```
