@@ -34,11 +34,8 @@ This project analyzes the gut microbiome composition of **male and female adult 
 
 ##  Folder & File Structure
 <pre> ``` Finalproject/ ├── Finalproject.Rproj ├── FinalMicrobiomeProject.Rmd ├── FinalMicrobiomeProject.docx ├── FinalMicrobiomeProject_files/ │ └── figure-docx/ ├── README.md ├── versioncontrolgit.png ├── R_scripts/ │ ├── Finalproject.R │ ├── FinalMicrobiomeProject.Rmd │ ├── heatmap.R ├── Kraken_reports/ │ ├── F_01_CKDN240013765-1A_HJMVHDSXC_L2_unmapped_kraken_report.txt │ ├── F_02_CKDN240013766-1A_HKM53DSXC_L4_unmapped_kraken_report.txt │ ├── F_03_CKDN240011250-1A_HHCT2DSXC_L2_unmapped_kraken_report.txt │ ├── F_04_CKDN240011251-1A_HKLVFDSXC_L2_unmapped_kraken_report.txt │ ├── F_05_CKDN240011252-1A_HHCT2DSXC_L2_unmapped_kraken_report.txt │ ├── M_01_CKDN240013767-1A_HJMVHDSXC_L2_unmapped_kraken_report.txt │ ├── M_02_CKDN240013763-1A_HKN7JDSXC_L3_unmapped_kraken_report.txt │ ├── M_03_CKDN240011255-1A_HHCT2DSXC_L3_unmapped_kraken_report.txt │ ├── M_04_CKDN240011256-1A_HHCT2DSXC_L3_unmapped_kraken_report.txt │ ├── M_05_CKDN240013764-1A_HJMVHDSXC_L2_unmapped_kraken_report.txt │ ├── genus_read_counts_matrix.csv │ ├── presence_absence_matrix.csv │ └── presence_absence_matrix_aggregated.csv ├── figures/ │ ├── richness_plot_aggregated.png │ ├── richness_plot_aggregated.pdf │ ├── richness_boxplot_final.png │ ├── richness_boxplot_final.pdf │ └── genus_readcount_heatmap_top100.pdf ``` </pre>
-## How to Clone This Project
-
-git clone https://github.com/mzb0226/PLPA-6820.git
-cd PLPA-6820/Finalproject
 ---
+
 ##  How to Run the Scripts
 
 All R scripts used in this project are stored in the `R_scripts/` folder. Each script corresponds to a specific step in the microbiome analysis pipeline and can be run independently.
@@ -114,3 +111,13 @@ This project was completed as part of the **PLPA-6820** graduate-level coursewor
 Special thanks to:
 - **Dr. Zachary Noel**, for his insightful lectures, guidance, and support throughout the course.
 - **ChatGPT (OpenAI)**, for assisting with R code generation, and debugging.
+---
+
+## How to Clone This Project
+
+To clone this repository and navigate to the project folder:
+
+```bash
+git clone https://github.com/mzb0226/PLPA-6820.git
+cd PLPA-6820/Finalproject
+
