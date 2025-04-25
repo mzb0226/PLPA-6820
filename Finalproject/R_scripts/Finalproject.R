@@ -1,9 +1,11 @@
 # Load required packages
 library(tidyverse)
 library(readr)
-
+library(pheatmap)
+library(tibble)
+library(ggpubr)
 # Set folder with Kraken report files
-report_dir <- "C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject"
+report_dir <- "Kraken_reports"
 files <- list.files(report_dir, pattern = "_kraken_report.txt$", full.names = TRUE)
 
 # Function to extract presence from each report
@@ -58,7 +60,7 @@ write_csv(presence_aggregated, file.path(report_dir, "presence_absence_matrix_ag
 cat("Saved aggregated matrix.\n")
 
 # Plot richness
-# Colorblind-friendly palette (Okabe & Ito)
+# Colorblind-friendly palette
 cb_palette <- c("Female" = "#E69F00", "Male" = "#56B4E9")
 
 # Updated plot
@@ -71,20 +73,19 @@ richness_plot <- ggplot(presence_aggregated, aes(x = Sample, y = Richness, fill 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10))
 
 # Save plot
-ggsave("C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject/figures/richness_plot_aggregated_colorblind.png",
+ggsave("figure/richness_plot_aggregated.png",
        plot = richness_plot, width = 8, height = 4, dpi = 300)
-# Set path to save the PDF
-pdf("C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject/figures/richness_plot_aggregated_colorblind.pdf",
-    width = 8, height = 4)  # you can adjust size
 
 # Draw the plot
 print(richness_plot)
+# Set path to save the PDF
+pdf("figures/richness_plot_aggregated.pdf",
+    width = 8, height = 4)
 
 # Close the PDF device
 dev.off()
 
 cat("PDF saved successfully.\n")
-
 
 #t-test
 library(ggpubr)
@@ -96,7 +97,7 @@ richness_boxplot <- ggboxplot(
   y = "Richness",
   fill = "Group",
   color = "black",
-  palette = c("Female" = "#E69F00", "Male" = "#56B4E9")  # Okabe-Ito palette
+  palette = c("Female" = "#E69F00", "Male" = "#56B4E9") 
 ) +
   stat_compare_means(
     method = "t.test",
@@ -117,9 +118,9 @@ richness_boxplot <- ggboxplot(
   )
 
 print(richness_boxplot)
-pdf("C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject/figures/richness_boxplot_final.pdf",
+pdf("figures/richness_boxplot_final.pdf",
     width = 6, height = 4)
 print(richness_boxplot)
 dev.off()
-ggsave("C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject/figures/richness_boxplot_final.png",
+ggsave("figures/richness_boxplot_final.png",
        plot = richness_boxplot, width = 6, height = 4, dpi = 300)
