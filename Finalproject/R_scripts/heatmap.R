@@ -4,7 +4,7 @@ library(pheatmap)
 library(tibble)
 
 # Set report directory
-report_dir <- "C:/Users/muhta/OneDrive/Documents/GitHub/PLPA-6820/Finalproject"
+report_dir <- "Kraken_reports"
 files <- list.files(report_dir, pattern = "_kraken_report.txt$", full.names = TRUE)
 
 # Function to extract genus-level read counts with renamed samples
